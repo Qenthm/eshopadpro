@@ -7,33 +7,32 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Repository
 public class ProductRepository {
-    private List<Product> productData = new ArrayList<>();
+    // Using CopyOnWriteArrayList for thread-safe operations
+    private List<Product> productData = new CopyOnWriteArrayList<>();
     private int currentProductId = 1;
 
     public Product create(Product product) {
-        // Set unique product ID
-        product.setProductId(String.valueOf(currentProductId++)); // Assign current ID and increment
-        productData.add(product); // Add the product to the repository
+        product.setProductId(String.valueOf(currentProductId++));
+        productData.add(product);
         return product;
     }
 
-
     public Iterator<Product> findAll() {
-        return productData.iterator(); // Return an iterator of all products
+        // Returns a snapshot of current state
+        return new ArrayList<>(productData).iterator();
     }
 
     public Optional<Product> findById(String productId) {
-        // Find a product by its ID
         return productData.stream()
                 .filter(product -> product.getProductId().equals(productId))
                 .findFirst();
     }
 
     public void updateProduct(String productId, String newName, int newQuantity) {
-        // Find the product by ID and update its fields
         for (Product product : productData) {
             if (product.getProductId().equals(productId)) {
                 product.setProductName(newName);
@@ -42,5 +41,13 @@ public class ProductRepository {
             }
         }
         throw new RuntimeException("Product with ID " + productId + " not found");
+    }
+
+    public boolean delete(String productId) {
+        return productData.removeIf(product -> product.getProductId().equals(productId));
+    }
+
+    public void deleteAll() {
+        productData.clear();
     }
 }

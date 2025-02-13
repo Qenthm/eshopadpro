@@ -37,4 +37,14 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Failed to find updated product"));
     }
+
+    @Override
+    public void deleteProduct(String productId) {
+        boolean deleted = productRepository.delete(productId);
+        if (!deleted) {
+            throw new RuntimeException("Product with ID " + productId + " not found");
+        }
+    }
+
+
 }
