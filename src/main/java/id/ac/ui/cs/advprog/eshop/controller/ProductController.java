@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
 
 import java.util.List;
 
@@ -74,4 +77,15 @@ public class ProductController {
         model.addAttribute("errorMessage", ex.getMessage());
         return "error"; // Show a global error page if needed
     }
+
+    @GetMapping("/delete/{productId}")
+    public String deleteProduct(@PathVariable String productId) {
+        try {
+            service.deleteProduct(productId);
+            return "redirect:/product/list";
+        } catch (Exception e) {
+            return "redirect:/product/list?error=delete";
+        }
+    }
+
 }

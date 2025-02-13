@@ -9,4 +9,6 @@ public interface ProductService {
 
     // Add this method
     Product updateProduct(String productId, String newName, int newQuantity); // Updates product details
+    void deleteProduct(String productId);
+
 }

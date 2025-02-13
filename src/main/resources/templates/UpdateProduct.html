@@ -7,6 +7,17 @@
           rel="stylesheet"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
+    <style>
+        .error-message {
+            color: red;
+            font-size: 0.8em;
+            margin-top: 5px;
+            display: none;
+        }
+        .input-error {
+            border-color: red;
+        }
+    </style>
 </head>
 <body>
 
@@ -14,7 +25,7 @@
     <h3>Update Product</h3>
 
     <!-- Form for updating product -->
-    <form th:action="@{/product/update}" th:object="${product}" method="post">
+    <form th:action="@{/product/update}" th:object="${product}" method="post" id="productForm">
         <!-- Hidden field to store Product ID -->
         <input type="hidden" th:field="*{productId}"/>
 
@@ -32,12 +43,45 @@
             <input th:field="*{productQuantity}" type="text"
                    class="form-control mb-4 col-4"
                    id="quantityInput" placeholder="Enter product quantity"/>
+            <small class="error-message" id="quantityError">Quantity must be a positive integer</small>
         </div>
 
         <button type="submit" class="btn btn-primary">Update</button>
         <a href="/product/list" class="btn btn-danger">Cancel</a>
     </form>
 </div>
+
+<script>
+    document.getElementById('productForm').addEventListener('submit', function(e) {
+        const quantityInput = document.getElementById('quantityInput');
+        const quantityError = document.getElementById('quantityError');
+        const quantity = quantityInput.value;
+
+        // Check if quantity is a positive integer
+        if (!Number.isInteger(Number(quantity)) || Number(quantity) < 0 || quantity.includes('.')) {
+            e.preventDefault(); // Prevent form submission
+            quantityInput.classList.add('input-error');
+            quantityError.style.display = 'block';
+        } else {
+            quantityInput.classList.remove('input-error');
+            quantityError.style.display = 'none';
+        }
+    });
+
+    // Real-time validation as user types
+    document.getElementById('quantityInput').addEventListener('input', function() {
+        const quantityError = document.getElementById('quantityError');
+        const quantity = this.value;
+
+        if (!Number.isInteger(Number(quantity)) || Number(quantity) < 0 || quantity.includes('.')) {
+            this.classList.add('input-error');
+            quantityError.style.display = 'block';
+        } else {
+            this.classList.remove('input-error');
+            quantityError.style.display = 'none';
+        }
+    });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
