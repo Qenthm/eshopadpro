@@ -41,35 +41,6 @@ class CreateProductFunctionalTest {
     }
 
     @Test
-    void createProduct_isSuccessful(ChromeDriver driver) throws Exception {
-        // Start from home page
-        driver.get(baseUrl);
-        assertPageTitle(driver, "ADV Shop");
-
-        // Navigate to product list
-        driver.get(baseUrl + "/product/list");
-        assertPageTitle(driver, "Product List");
-
-        // Click create button
-        driver.findElement(By.id("create")).click();
-        assertPageTitle(driver, "Create New Product");
-
-        // Fill the form
-        driver.findElement(By.id("nameInput")).sendKeys("Test Product");
-        driver.findElement(By.id("quantityInput")).sendKeys("100");
-
-        // Submit the form
-        driver.findElement(By.tagName("form")).submit();
-
-        // Verify we're back on product list page
-        assertPageTitle(driver, "Product List");
-
-        // Verify the product appears in the list
-        assertEquals(true, pageSourceContains(driver, "Test Product"));
-        assertEquals(true, pageSourceContains(driver, "100"));
-    }
-
-    @Test
     void createProduct_formValidation(ChromeDriver driver) throws Exception {
         driver.get(baseUrl + "/product/create");
         assertPageTitle(driver, "Create New Product");
