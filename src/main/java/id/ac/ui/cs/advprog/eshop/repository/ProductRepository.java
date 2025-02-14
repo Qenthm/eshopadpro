@@ -11,18 +11,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Repository
 public class ProductRepository {
-    // Using CopyOnWriteArrayList for thread-safe operations
     private List<Product> productData = new CopyOnWriteArrayList<>();
     private int currentProductId = 1;
 
     public Product create(Product product) {
+        validateProductName(product.getProductName());
+        validateProductQuantity(product.getProductQuantity());
         product.setProductId(String.valueOf(currentProductId++));
         productData.add(product);
         return product;
     }
 
     public Iterator<Product> findAll() {
-        // Returns a snapshot of current state
         return new ArrayList<>(productData).iterator();
     }
 
@@ -33,14 +33,39 @@ public class ProductRepository {
     }
 
     public void updateProduct(String productId, String newName, int newQuantity) {
-        for (Product product : productData) {
-            if (product.getProductId().equals(productId)) {
-                product.setProductName(newName);
-                product.setProductQuantity(newQuantity);
-                return;
-            }
+        validateProductName(newName);
+        validateProductQuantity(newQuantity);
+
+        Optional<Product> productOptional = findById(productId);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            setProductName(product, newName);
+            setProductQuantity(product, newQuantity);
+        } else {
+            throw new RuntimeException("Product with ID " + productId + " not found");
         }
-        throw new RuntimeException("Product with ID " + productId + " not found");
+    }
+
+    public void setProductQuantity(Product product, int quantity) {
+        validateProductQuantity(quantity);
+        product.setProductQuantity(quantity);
+    }
+
+    public void setProductName(Product product, String name) {
+        validateProductName(name);
+        product.setProductName(name);
+    }
+
+    private void validateProductName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Product name cannot be empty");
+        }
+    }
+
+    private void validateProductQuantity(int quantity) {
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Product quantity cannot be negative");
+        }
     }
 
     public boolean delete(String productId) {
