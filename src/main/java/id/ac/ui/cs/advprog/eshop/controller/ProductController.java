@@ -41,16 +41,12 @@ public class ProductController {
     // NEW: Display the update product form
     @GetMapping("/update")
     public String updateProductPage(@RequestParam(value = "productId", required = true) String productId, Model model) {
-        // Handle the case when the product ID is invalid or missing
-        if (productId == null || productId.trim().isEmpty()) {
-            throw new IllegalArgumentException("Product ID is required.");
-        }
 
         // Try to find the product by its ID
         Product product = service.findAll().stream()
                 .filter(p -> p.getProductId().equals(productId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Product not found for ID: " + productId));
+                .orElseThrow(null);
 
         // Pass the product to the form
         model.addAttribute("product", product);
@@ -71,21 +67,11 @@ public class ProductController {
         return "redirect:list"; // Redirect to the product list after update
     }
 
-    // Optionally, add a global exception handler for better error response
-    @ExceptionHandler(IllegalArgumentException.class)
-    public String handleIllegalArgumentException(IllegalArgumentException ex, Model model) {
-        model.addAttribute("errorMessage", ex.getMessage());
-        return "error"; // Show a global error page if needed
-    }
-
     @GetMapping("/delete/{productId}")
     public String deleteProduct(@PathVariable String productId) {
-        try {
-            service.deleteProduct(productId);
-            return "redirect:/product/list";
-        } catch (Exception e) {
-            return "redirect:/product/list?error=delete";
-        }
+        service.deleteProduct(productId);
+        return "redirect:/product/list";
     }
+
 
 }
