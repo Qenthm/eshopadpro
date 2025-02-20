@@ -2,8 +2,8 @@ package id.ac.ui.cs.advprog.eshop.repository;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -100,6 +100,89 @@ class ProductRepositoryTest {
             productRepository.deleteAll();
             Iterator<Product> iterator = productRepository.findAll();
             assertFalse(iterator.hasNext());
+        }
+    }
+
+    @Nested
+    class ValidationTests {
+        @Test
+        void testValidateProductNameWithNull() {
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+                productRepository.create(new Product() {{
+                    setProductName(null);
+                    setProductQuantity(10);
+                }});
+            });
+            assertEquals("Product name cannot be empty", exception.getMessage());
+        }
+
+        @Test
+        void testValidateProductNameMethod() {
+            // Null name should throw exception
+            assertThrows(IllegalArgumentException.class, () -> {
+                productRepository.validateProductName(null);
+            }, "Product name cannot be empty");
+
+            // Empty string should throw exception
+            assertThrows(IllegalArgumentException.class, () -> {
+                productRepository.validateProductName("");
+            }, "Product name cannot be empty");
+
+            // Whitespace only should throw exception
+            assertThrows(IllegalArgumentException.class, () -> {
+                productRepository.validateProductName("   ");
+            }, "Product name cannot be empty");
+
+            // Valid name should not throw exception
+            assertDoesNotThrow(() -> {
+                productRepository.validateProductName("Laptop");
+            });
+        }
+
+
+        @Test
+        void testValidateProductNameWithEmptyString() {
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+                productRepository.create(new Product() {{
+                    setProductName("");
+                    setProductQuantity(10);
+                }});
+            });
+            assertEquals("Product name cannot be empty", exception.getMessage());
+        }
+
+        @Test
+        void testValidateProductNameWithWhitespace() {
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+                productRepository.create(new Product() {{
+                    setProductName("   ");
+                    setProductQuantity(10);
+                }});
+            });
+            assertEquals("Product name cannot be empty", exception.getMessage());
+        }
+
+        @Test
+        void testValidateProductNameWithSingleSpace() {
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+                productRepository.create(new Product() {{
+                    setProductName(" ");
+                    setProductQuantity(10);
+                }});
+            });
+            assertEquals("Product name cannot be empty", exception.getMessage());
+        }
+
+
+
+        @Test
+        void testValidateProductNameWithValidName() {
+            assertDoesNotThrow(() -> {
+                productRepository.create(new Product() {{
+                    setProductName("Valid Product");
+                    setProductQuantity(10);
+                }});
+            });
         }
     }
 }

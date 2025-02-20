@@ -56,7 +56,7 @@ public class ProductRepository {
         product.setProductName(name);
     }
 
-    private void validateProductName(String name) {
+    public void validateProductName(String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Product name cannot be empty");
         }
