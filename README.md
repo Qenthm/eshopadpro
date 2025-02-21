@@ -1,21 +1,22 @@
-# Reflection 1
+# Tutorial 1
+## Reflection 1
 After doing the first Excercise, i would say that I have written clean code if there were to be any code that is viewed as not clean, please let me know and I will try my best to learn from it and do a better job next time.
 
 
-# Reflection 2
+## Reflection 2
 
-## Unit Testing Experience and Best Practices
+### Unit Testing Experience and Best Practices
 
 Writing unit tests has taught me several important lessons about software testing:
 
-### Quantity vs Quality of Tests
+#### Quantity vs Quality of Tests
 The number of unit tests in a class shouldn't be determined by a fixed number, but rather by:
 - Test coverage of critical functionality
 - Different scenarios and edge cases
 - Business requirements
 - Code complexity
 
-### Ensuring Adequate Test Coverage
+#### Ensuring Adequate Test Coverage
 
 To ensure sufficient test coverage, we should:
 1. Test happy paths and edge cases
@@ -24,7 +25,7 @@ To ensure sufficient test coverage, we should:
 4. Test both valid and invalid inputs
 5. Focus on testing business-critical paths
 
-### Code Coverage Insights
+#### Code Coverage Insights
 
 Having 100% code coverage doesn't guarantee bug-free code because:
 - It only shows which code was executed, not if it works correctly
@@ -33,9 +34,9 @@ Having 100% code coverage doesn't guarantee bug-free code because:
 - Missing edge cases are still possible
 - Doesn't verify business logic correctness
 
-## Clean Code in Functional Testing
+### Clean Code in Functional Testing
 
-### Issues with Current Approach
+#### Issues with Current Approach
 
 Creating similar test classes with duplicate setup procedures raises several clean code concerns:
 
@@ -49,7 +50,7 @@ Creating similar test classes with duplicate setup procedures raises several cle
     - Higher risk of inconsistencies
     - Increased maintenance effort
 
-### Suggested Improvements
+#### Suggested Improvements
 
 1. **Create a Base Test Class**
    ```java
@@ -94,3 +95,46 @@ These improvements would result in:
 - More reliable test execution
 
 The goal is to create a testing framework that is both robust and maintainable while ensuring proper test coverage of the application's functionality.
+
+# Tutorial 2
+## Reflection
+
+### Code Quality Issues Fixed and Strategy
+During the exercise, I identified and fixed several code quality issues:
+
+1. **Unnecessary Exception Handling in `deleteProduct` (ProductController.java)**
+   - **Issue:** A try-catch block was catching exceptions and rethrowing them unnecessarily, leading to redundant exception handling.
+   - **Fix:** Removed the try-catch block and allowed exceptions to propagate naturally.
+
+2. **Use of `.orElseThrow()` in Stream Filtering (ProductController.java)**
+   - **Issue:** Using `.orElseThrow()` forced an exception instead of handling missing products more gracefully.
+   - **Fix:** Replaced `.orElseThrow()` with `.orElse(null)`, avoiding unnecessary exception branches.
+
+3. **Mockito Unnecessary Stubbing Exception in Tests**
+   - **Issue:** Some test cases were stubbing methods that were not actually called, leading to an `UnnecessaryStubbingException`.
+   - **Fix:** Removed unnecessary stubbing and ensured only required method calls were stubbed.
+
+4. **Redundant Test Cases**
+   - **Issue:** Some test cases had unnecessary assertions or repeated code, making them harder to maintain.
+   - **Fix:** Refactored tests using reusable methods and improved assertions.
+
+### CI/CD Reflection
+
+Our current CI/CD pipeline follows the **Continuous Integration (CI) and Continuous Deployment (CD)** principles. Below are the reasons why:
+
+1. **Automated Testing and Quality Checks**
+   - Every push to the repository triggers **unit tests**, **code quality analysis**, and **build checks**.
+   - This ensures that new changes do not break the application before they are merged.
+
+2. **Automated Deployment to PaaS**
+   - Using **GitHub Actions**, the pipeline deploys the latest code changes to **Koyeb** automatically.
+   - This removes manual deployment steps and reduces human error.
+
+3. **Fast Feedback Loop**
+   - Developers get immediate feedback on code quality and deployment status.
+   - If a test fails or deployment encounters an issue, the pipeline prevents bad code from going live.
+
+Overall, the CI/CD setup ensures **better code quality, faster development cycles, and reliable deployment**, aligning with the core principles of DevOps.
+
+## Coverage
+![image](https://cdn.discordapp.com/attachments/1339939531557965925/1342464394252128377/Screenshot_2025-02-21_at_18.54.06.png?ex=67b9bae5&is=67b86965&hm=3cce92c3fbdba5a353d7b0b21eb77ecd1588d693db92839b7e964cc6b67abecb&)
