@@ -22,7 +22,7 @@ public class ProductController {
     public String createProductPage(Model model) {
         Product product = new Product();
         model.addAttribute("product", product);
-        return "createProduct";
+        return "CreateProduct";
     }
 
     @PostMapping("/create")
@@ -35,7 +35,7 @@ public class ProductController {
     public String listProduct(Model model) {
         List<Product> allProducts = service.findAll();
         model.addAttribute("products", allProducts);
-        return "productList";
+        return "ProductList";
     }
 
     // NEW: Display the update product form
@@ -50,7 +50,7 @@ public class ProductController {
 
         // Pass the product to the form
         model.addAttribute("product", product);
-        return "updateProduct"; // The name of your update product Thymeleaf view
+        return "UpdateProduct"; // The name of your update product Thymeleaf view
     }
 
     // Handle product updates
