@@ -138,3 +138,100 @@ Overall, the CI/CD setup ensures **better code quality, faster development cycle
 
 ## Coverage
 ![image](https://cdn.discordapp.com/attachments/1339939531557965925/1342464394252128377/Screenshot_2025-02-21_at_18.54.06.png?ex=67b9bae5&is=67b86965&hm=3cce92c3fbdba5a353d7b0b21eb77ecd1588d693db92839b7e964cc6b67abecb&)
+
+# Tutorial 3 - Reflection
+## SOLID Principles Implementation and Analysis
+
+### 1. Applied SOLID Principles
+
+#### Single Responsibility Principle (SRP)
+- Separated car-related operations into dedicated classes:
+   - `CarController`: Handles HTTP requests
+   - `CarService`: Manages business logic
+   - `CarRepository`: Handles data persistence
+- Each class has one specific responsibility and reason to change
+
+#### Open/Closed Principle (OCP)
+- Created `CarService` interface to allow extending functionality
+- New car operations can be added by implementing new methods without modifying existing code
+- **Example:** Adding new car validations without changing core service logic
+
+#### Liskov Substitution Principle (LSP)
+- `CarServiceImpl` properly implements `CarService` interface
+- Any method expecting `CarService` can work with `CarServiceImpl`
+- Ensures type safety and behavioral consistency
+
+#### Interface Segregation Principle (ISP)
+- `CarService` interface contains only car-related methods
+- Clients are not forced to depend on methods they don't use
+- Kept interfaces focused and cohesive
+
+#### Dependency Inversion Principle (DIP)
+- `CarController` depends on `CarService` interface, not implementation
+- Dependencies are injected through constructor
+- Enables easier testing and maintenance
+
+---
+
+### 2. Advantages of SOLID Application
+
+#### Improved Maintainability
+```java
+public class CarController {
+    private final CarService carService;
+
+    @Autowired
+    public CarController(CarService carService) {
+        this.carService = carService;
+    }
+}
+```
+### Advantages of SOLID Application
+
+#### Improved Maintainability
+- Dependencies are clear and explicit
+- Easy to modify single components
+- Reduced coupling between classes
+
+#### Enhanced Testability
+- Services can be mocked through interfaces
+- Components can be tested in isolation
+- Reduced test complexity
+
+#### Better Scalability
+- New features can be added without changing existing code
+- Easy to extend functionality through interfaces
+- Clear separation of concerns
+
+---
+
+### 3. Disadvantages of Not Applying SOLID
+
+#### Code Rigidity
+Without SOLID:
+```java
+public class CarManager {
+    // Handles HTTP, business logic, and data access
+    public void createCar(Car car) { /* ... */ }
+    public void updateInventory() { /* ... */ }
+    public void generateReport() { /* ... */ }
+}
+```
+- Hard to modify without affecting other parts
+- Difficult to maintain and understand
+- High risk of introducing bugs
+
+#### Testing Difficulties
+- Tightly coupled code is hard to test
+- Need to mock multiple dependencies
+- Complex setup for unit tests
+
+#### Limited Extensibility
+- New features require modifying existing code
+- Higher risk of regression bugs
+- Difficult to adapt to changing requirements
+
+---
+
+### Conclusion
+The application of SOLID principles has significantly improved our codebase's structure, making it more maintainable, testable, and extensible. While the initial setup required more planning and code organization, the long-term benefits far outweigh the initial investment.
