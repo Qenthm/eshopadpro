@@ -52,5 +52,4 @@ public class PaymentRepository {
     public Iterator<Payment> getAllPayments() {
         return payments.iterator();
     }
-
 }
