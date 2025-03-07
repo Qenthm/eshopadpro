@@ -2,6 +2,9 @@ package id.ac.ui.cs.advprog.eshop.model;
 
 import lombok.Getter;
 
+import id.ac.ui.cs.advprog.eshop.enums.PaymentMethod;
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
